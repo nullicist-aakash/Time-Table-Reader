@@ -1,0 +1,65 @@
+﻿<Page
+    x:Class="Time_Table__Windows_.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Time_Table__Windows_"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <NavigationView PaneDisplayMode="LeftCompact" IsBackButtonVisible="Collapsed" IsSettingsVisible="False" x:Name="NavView">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="Select Courses to Consider" x:Name="SelectCourse" IsSelected="True">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7BE;">
+
+                        </FontIcon>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Choose Sections" x:Name="SelectTiming">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7C4;">
+
+                        </FontIcon>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Time Table View" x:Name="View">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE787;">
+                        </FontIcon>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <NavigationView.PaneFooter>
+                <StackPanel>
+                    <NavigationViewItem Content="FeedBack" x:Name="FeedBack">
+                        <NavigationViewItem.Icon>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xED15;">
+                            </FontIcon>
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
+                    <NavigationViewItem Content="About" Tapped="ShowAbout">
+                        <NavigationViewItem.Icon>
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;">
+
+                            </FontIcon>
+                        </NavigationViewItem.Icon>
+                        <FlyoutBase.AttachedFlyout>
+                            <Flyout>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="About" FontSize="20"/>
+                                    <TextBlock/>
+                                    <TextBlock Text="Time Table Demo"/>
+                                    <TextBlock Text="© 2020 Aakash All Rights Reserved"/>
+                                </StackPanel>
+                            </Flyout>
+                        </FlyoutBase.AttachedFlyout>
+                    </NavigationViewItem>
+                </StackPanel>
+            </NavigationView.PaneFooter>
+            <Frame x:Name="NavigationFrame" Margin="5"/>
+        </NavigationView>
+    </Grid>
+</Page>
