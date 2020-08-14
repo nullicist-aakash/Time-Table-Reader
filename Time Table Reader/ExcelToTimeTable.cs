@@ -90,7 +90,6 @@ namespace Time_Table_Generator
                     Units = GetCredit(courseEntry[0][5])
                 }
             };
-            Console.WriteLine("Working on {0}", course.Course_Name);
 
             var ClassIndices = FindStartIndices(courseEntry, 2);
             var Ranges = FindRanges(ClassIndices);
@@ -185,13 +184,13 @@ namespace Time_Table_Generator
                 SectionNo = int.Parse(FirstLine[6])
             };
 
-            (section.Room, section.ClassTiming) = GetDayTimeLoc(days: FirstLine[8], hours: FirstLine[9], room: "-1");
-            /*
+            (section.Room, section.ClassTiming) = GetDayTimeLoc(days: FirstLine[9], hours: FirstLine[10], room: FirstLine[8]);
+
             if (FirstLine[11] == "")
                 FirstLine[11] = "  ";
             var s = FirstLine[11].Split(' ');
-            */
-            (section.CommonHourRoom, section.CommonHourTiming) = (-1, new Timing(0, 0));// GetDayTimeLoc(days: s[0], hours: s[1], room: s[2]);
+
+            (section.CommonHourRoom, section.CommonHourTiming) = GetDayTimeLoc(days: s[0], hours: s[1], room: s[2]);
 
             section.Teachers.AddRange(from row in rows select TeacherGenerator.GenerateTeacher(row[7])); 
 
