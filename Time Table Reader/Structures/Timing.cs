@@ -56,12 +56,12 @@ namespace Time_Table_Generator
                 { "M", DayOfWeek.Monday },
                 { "T", DayOfWeek.Tuesday },
                 { "W", DayOfWeek.Wednesday },
-                { "Th", DayOfWeek.Thursday },
+                { "TH", DayOfWeek.Thursday },
                 { "F", DayOfWeek.Friday },
                 { "S", DayOfWeek.Saturday }
             };
 
-            foreach (var x in s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (var x in from a in s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) select a.ToUpper())
                 yield return dict[x];
         }
 

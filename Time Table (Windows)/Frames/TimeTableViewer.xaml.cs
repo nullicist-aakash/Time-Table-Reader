@@ -22,7 +22,7 @@ namespace Time_Table__Windows_.Frames
     {
         public TimeTableModel Ref => Global.Instance.SelectedCourses;
 
-        readonly bool[,] arr = new bool[6, 10];
+        readonly bool[,] arr = new bool[6, 13];
 
         public TimeTableViewer()
         {
@@ -101,7 +101,7 @@ namespace Time_Table__Windows_.Frames
 
             for (int i = 2; i < 8; ++i)
             {
-                for (int j = 1; j < 11; ++j)
+                for (int j = 1; j < 13; ++j)
                 {
                     if (arr[i - 2, j - 1])
                         continue;

@@ -8,24 +8,24 @@ namespace Time_Table_Generator
     {
         static void Main(string[] args)
         {
-            string fileloc = @"D:\G - Projects\Time Table Khurapat\Hyderabad.xlsx";
+            string fileloc = @"D:\G - Projects\Time Table Khurapat\Goa.xlsx";
 
             TimeTable t;
 
             using (var x = new ExcelToTimeTable { FileLoc = fileloc })
             {
                 x.Load();
+                Console.WriteLine("{0} : Loaded", DateTime.Now);
                 t = x.GenerateTimeTable();
             }
-            Console.WriteLine("Import Completed");
+            Console.WriteLine("{0} : Import Completed", DateTime.Now);
 
             string JSON = JsonConvert.SerializeObject(t, Formatting.Indented);
 
 
-
             Console.WriteLine("JSON Conversion Completed");
 
-            File.WriteAllText(@"D:\G - Projects\Time Table Khurapat\Hyderabad.Json", JSON);
+            File.WriteAllText(@"D:\G - Projects\Time Table Khurapat\Goa.Json", JSON);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.Office.Interop.Excel;
-using System.Linq;
 
 namespace Time_Table_Generator
 {
@@ -34,11 +34,9 @@ namespace Time_Table_Generator
         public TimeTable GenerateTimeTable()
         {
             var contents = ExtractRows(Worksheet.UsedRange);
-            var SplittedCourses = SplitCourses(contents);
-
+            var courses_splitted = from x in contents select GetCourseList(x);
             var tt = new TimeTable();
-            tt.Courses.AddRange(from x in SplittedCourses select GenerateCourses(x));
-
+            tt.Courses.AddRange(GenerateCourses(courses_splitted.ToList()));
             return tt;
         }
 
@@ -62,139 +60,190 @@ namespace Time_Table_Generator
             return Content;
         }
 
-        private List<List<string[]>> SplitCourses(List<string[]> allRows)
+        IntermediateStructure GetCourseList(string[] row)
         {
-            if (allRows.Count == 0)
-                return new List<List<string[]>>();
-            if (allRows.Count == 1)
-                return new List<List<string[]>> { allRows };
-
-            var _startIndices = FindStartIndices(allRows);
-            var _ranges = FindRanges(_startIndices);
-
-            return GetRangeRows(allRows, _ranges);
+            return (-1,
+                row[2],
+                row[3].Replace("\n", "").Replace("\r", ""),
+                GenerateCredits(row[4], row[5]),
+                row[5] == "R" ? "L" : row[5],
+                int.Parse(row[6]),
+                (from x
+                 in row[7].Replace("\n", "").Replace("\r", "").Split(new char[] { ',', '/' }, StringSplitOptions.RemoveEmptyEntries)
+                 select x.ToUpper()).ToList(),
+                 GenerateTiming(row[8]));
         }
 
-        private Course GenerateCourses(List<string[]> courseEntry)
+        List<Course> GenerateCourses(List<IntermediateStructure> structures)
         {
-            var course = new Course
+            var courses = new List<Course>();
+
+            for (int i = 0; i < structures.Count; )
             {
-                COMCOD = int.Parse(courseEntry[0][0]),
-                CourseNo_Dept = courseEntry[0][1].Split(' ')[0],
-                CourseNo_Id = courseEntry[0][1].Split(' ')[1],
-                Course_Name = courseEntry[0][2],
-                Credits = new Credit
+                int j = i;
+                var common = new List<IntermediateStructure>();
+
+                Console.WriteLine("{0} : Processing course : {1}", DateTime.Now, structures[j].CourseName);
+                while (i < structures.Count && structures[i].CourseName == structures[j].CourseName)
+                    common.Add(structures[i++]);
+
+                courses.Add(CombineCourse(common));
+            }
+
+            return courses;
+        }
+
+        Course CombineCourse(List<IntermediateStructure> entries)
+        {
+            Course c = new Course
+            {
+                COMCOD = entries[0].COMCOD,
+                CourseNo_Dept = entries[0].CourseID.Split(' ')[0],
+                CourseNo_Id = entries[0].CourseID.Split(' ')[1],
+                Course_Name = entries[0].CourseName,
+                Credits = entries[0].credits
+            };
+
+            var generalList = new List<IntermediateStructure>();
+            var practicalList = new List<IntermediateStructure>();
+            var tutorialList = new List<IntermediateStructure>();
+
+            foreach (var x in entries)
+                switch (x.Type)
                 {
-                    Lecture = GetCredit(courseEntry[0][3]),
-                    Practical = GetCredit(courseEntry[0][4]),
-                    Units = GetCredit(courseEntry[0][5])
+                    case "L": generalList.Add(x); break;
+                    case "P": practicalList.Add(x); break;
+                    case "T": tutorialList.Add(x); break;
                 }
-            };
 
-            var ClassIndices = FindStartIndices(courseEntry, 2);
-            var Ranges = FindRanges(ClassIndices);
-            var SplittedRows = GetRangeRows(courseEntry, Ranges);
+            c.GeneralClass.AddRange(CombineComponents(generalList));
+            c.PracticalClass.AddRange(CombineComponents(practicalList));
+            c.TutorialClass.AddRange(CombineComponents(tutorialList));
 
-            if (SplittedRows.Count > 0)
-                course.GeneralClass.AddRange(GenerateClassEntries(SplittedRows[0]));
-         
-            for (int i = 1; i < SplittedRows.Count; ++i)
+            return c;
+        }
+
+        IEnumerable<Section> CombineComponents(List<IntermediateStructure> sections)
+        {
+            foreach (var x in sections)
             {
-                var classes = GenerateClassEntries(SplittedRows[i]);
+                var section = new Section
+                {
+                    ClassTiming = x.time,
+                    CommonHourRoom = -1,
+                    CommonHourTiming = new Timing(0, 0),
+                    Room = -1,
+                    SectionNo = x.Section
+                };
+                section.Teachers.AddRange(from y in x.Teachers select TeacherGenerator.GenerateTeacher(y));
+                yield return section;
+            }
+        }
 
-                if (SplittedRows[i][0][2].ToUpper() == "TUTORIAL")
-                    course.TutorialClass.AddRange(classes);
-                else if (SplittedRows[i][0][2].ToUpper() == "PRACTICAL")
-                    course.PracticalClass.AddRange(classes);
+        Credit GenerateCredits(string cell, string type)
+        {
+            var units = (from x in cell.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) select int.Parse(x)).ToList();
+
+            Credit credits;
+            if (units.Count == 1 && type != "P")
+                credits = new Credit { Lecture = units[0], Practical = 0, Units = units[0] };
+            else if (units.Count == 1 && type == "P")
+                credits = new Credit { Lecture = 0, Practical = units[0], Units = units[0] };
+            else
+                credits = new Credit { Lecture = units[0], Practical = units[0], Units = units[0] };
+
+            return credits;
+        }
+
+        Timing GenerateTiming(string cell)
+        {
+            if (cell == "TBA")
+                return new Timing(0, 0);
+            var splits = cell.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var days = new List<string>();
+            var hours = new List<int>();
+
+            foreach (var x in splits)
+                if (int.TryParse(x, out int converted))
+                    hours.Add(converted);
                 else
-                    throw new Exception("Help me!! I was not designed to do this. Something bad happened in course " + course.Course_Name);
-            }
-            return course;
+                    days.Add(x);
+
+            return new Timing(string.Join(" ", days), string.Join(" ", hours));
+        }
+    }
+
+    internal class IntermediateStructure
+    {
+        public int COMCOD;
+        public string CourseID;
+        public string CourseName;
+        public Credit credits;
+        public string Type;
+        public int Section;
+        public List<string> Teachers;
+        public Timing time;
+
+        public IntermediateStructure(int cOMCOD, string courseID, string courseName, Credit credits, string type, int section, List<string> teachers, Timing time)
+        {
+            COMCOD = cOMCOD;
+            CourseID = courseID;
+            CourseName = courseName;
+            this.credits = credits;
+            Type = type;
+            Section = section;
+            Teachers = teachers;
+            this.time = time;
         }
 
-        private IEnumerable<Section> GenerateClassEntries(List<string[]> classes)
+        public override bool Equals(object obj)
         {
-            classes[0][6] = "1";
-            var ClassIndices = FindStartIndices(classes, 6);
-            var Ranges = FindRanges(ClassIndices);
-            var SplittedRows = GetRangeRows(classes, Ranges);
-
-            foreach (var section in SplittedRows)
-                yield return GenerateSection(section);
+            return obj is IntermediateStructure other &&
+                   COMCOD == other.COMCOD &&
+                   CourseID == other.CourseID &&
+                   CourseName == other.CourseName &&
+                   credits.Equals(other.credits) &&
+                   Type == other.Type &&
+                   Section == other.Section &&
+                   Teachers.SequenceEqual(other.Teachers) &&
+                   time.Equals(other.time);
         }
 
-        List<int> FindStartIndices(List<string[]> rows, int CheckIndex = 0)
+        public override int GetHashCode()
         {
-            var StartIndices = new List<int>();
-
-            for (int i = 0; i < rows.Count; ++i)
-                if (rows[i][CheckIndex] != "")
-                    StartIndices.Add(i);
-            StartIndices.Add(rows.Count);
-            return StartIndices;
+            int hashCode = -882678744;
+            hashCode = hashCode * -1521134295 + COMCOD.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(CourseID);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(CourseName);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Credit>.Default.GetHashCode(credits);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Type);
+            hashCode = hashCode * -1521134295 + Section.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<List<string>>.Default.GetHashCode(Teachers);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Timing>.Default.GetHashCode(time);
+            return hashCode;
         }
 
-        List<(int StartIndex, int Length)> FindRanges(List<int> startIndices)
+        public void Deconstruct(out int cOMCOD, out string courseID, out string courseName, out Credit credits, out string type, out int section, out List<string> teachers, out Timing time)
         {
-            var Range = new List<(int StartIndex, int Length)>();
-
-            for (int i = 0; i < startIndices.Count - 1; ++i)
-                Range.Add((startIndices[i], startIndices[i + 1] - startIndices[i]));
-       //     Range.Add((startIndices[startIndices.Count - 2], startIndices.Count - startIndices[startIndices.Count - 1]));
-
-            return Range;
+            cOMCOD = COMCOD;
+            courseID = CourseID;
+            courseName = CourseName;
+            credits = this.credits;
+            type = Type;
+            section = Section;
+            teachers = Teachers;
+            time = this.time;
         }
 
-        List<List<string[]>> GetRangeRows(List<string[]> rows, List<(int StartIndex, int Length)> range)
+        public static implicit operator (int COMCOD, string CourseID, string CourseName, Credit credits, string Type, int Section, List<string> Teachers, Timing time)(IntermediateStructure value)
         {
-            var lst = new List<List<string[]>>();
-
-            foreach (var (StartIndex, Length) in range)
-            {
-                lst.Add(new List<string[]>());
-
-                for (int i = 0; i < Length; ++i)
-                    lst[lst.Count - 1].Add(rows[StartIndex + i]);
-
-            }
-
-            return lst;
+            return (value.COMCOD, value.CourseID, value.CourseName, value.credits, value.Type, value.Section, value.Teachers, value.time);
         }
 
-        int GetCredit(string input)
+        public static implicit operator IntermediateStructure((int COMCOD, string CourseID, string CourseName, Credit credits, string Type, int Section, List<string> Teachers, Timing time) value)
         {
-            if (int.TryParse(input, out int ex))
-                return ex;
-            return 0;
-        }
-
-        (int Room, Timing timing) GetDayTimeLoc(string days, string hours, string room)
-        {
-            if (string.IsNullOrWhiteSpace(room))
-                room = "-1";
-
-            return (int.Parse(room), new Timing(days, hours));
-        }
-
-        public Section GenerateSection(List<string[]> rows)
-        {
-            var FirstLine = rows[0];
-            var section = new Section
-            {
-                SectionNo = int.Parse(FirstLine[6])
-            };
-
-            (section.Room, section.ClassTiming) = GetDayTimeLoc(days: FirstLine[9], hours: FirstLine[10], room: FirstLine[8]);
-
-            if (FirstLine[11] == "")
-                FirstLine[11] = "  ";
-            var s = FirstLine[11].Split(' ');
-
-            (section.CommonHourRoom, section.CommonHourTiming) = GetDayTimeLoc(days: s[0], hours: s[1], room: s[2]);
-
-            section.Teachers.AddRange(from row in rows select TeacherGenerator.GenerateTeacher(row[7])); 
-
-            return section;
+            return new IntermediateStructure(value.COMCOD, value.CourseID, value.CourseName, value.credits, value.Type, value.Section, value.Teachers, value.time);
         }
     }
 }

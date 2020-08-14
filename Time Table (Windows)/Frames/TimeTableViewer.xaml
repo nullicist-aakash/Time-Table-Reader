@@ -31,6 +31,8 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         
         <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Monday"/>
@@ -60,5 +62,9 @@
         <TextBlock Grid.Row="1" Grid.Column="9" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="04:00 - 04:50"/>
         <TextBlock Grid.Row="0" Grid.Column="10" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="10"/>
         <TextBlock Grid.Row="1" Grid.Column="10" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="05:00 - 05:50"/>
+        <TextBlock Grid.Row="0" Grid.Column="11" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="11"/>
+        <TextBlock Grid.Row="1" Grid.Column="11" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="06:00 - 06:50"/>
+        <TextBlock Grid.Row="0" Grid.Column="12" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="12"/>
+        <TextBlock Grid.Row="1" Grid.Column="12" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="07:00 - 07:50"/>
     </Grid>
 </Page>
