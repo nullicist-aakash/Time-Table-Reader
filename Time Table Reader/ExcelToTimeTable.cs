@@ -131,7 +131,7 @@ namespace Time_Table_Generator
                 {
                     ClassTiming = x.time,
                     CommonHourRoom = -1,
-                    CommonHourTiming = new Timing(0, 0),
+                    CommonHourTiming = Timing.GenerateEmptyTiming,
                     Room = -1,
                     SectionNo = x.Section
                 };
@@ -158,7 +158,8 @@ namespace Time_Table_Generator
         Timing GenerateTiming(string cell)
         {
             if (cell == "TBA")
-                return new Timing(0, 0);
+                return Timing.GenerateEmptyTiming;
+
             var splits = cell.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             var days = new List<string>();

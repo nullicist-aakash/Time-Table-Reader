@@ -5,49 +5,52 @@ using Newtonsoft.Json;
 
 namespace Time_Table_Generator
 {
-    [JsonObject(MemberSerialization.Fields)]
+    [JsonObject(MemberSerialization.OptIn)]
     public class Timing
     {
-        readonly int days = 0;
-        readonly int hours = 0;
-
-        public IEnumerable<int> Hours
-        {
-            get
-            {
-                for (int i = 1; i < 16; ++i)
-                    if ((hours & 1 << i) != 0)
-                        yield return i;
-            }
-        }
-
-        public IEnumerable<DayOfWeek> Days
-        {
-            get
-            {
-                for (int i = 0; i < 8; ++i)
-                    if ((days & 1 << i) != 0)
-                        yield return (DayOfWeek)i;
-            }
-        }
+        [JsonProperty]
+        readonly List<uint> Entries = new List<uint>();
+        static uint DayMap => 0xFFFF0000;
+        static uint HourMap => 0x0000FFFF;
+        public static Timing GenerateEmptyTiming => new Timing("", "");
 
         [JsonConstructor]
-        public Timing(int days, int hours)
+        public Timing(List<uint> input) => Entries.AddRange(input);
+        public Timing(string days, string hours) : this((days, hours)) { }
+        public Timing(IEnumerable<(string days, string hours)> input) : this(input.ToArray()) { }
+        public Timing(params (string days, string hours)[] Timings)
         {
-            this.days = days;
-            this.hours = hours;
+            foreach (var (days, hours) in Timings)
+            {
+                uint day = 0, hour = 0;
+                foreach (var x in GenerateDaysOfWeek(days))
+                    day |= (uint)(1 << (int)x);
+
+                foreach (var x in GenerateHours(hours))
+                    hour |= (uint)(1 << x);
+
+                Entries.Add(Construct(day, hour));
+            }
+            Entries.Sort();
         }
 
-        public Timing(string days, string hours)
+        (uint days, uint hours) Deconstruct(uint input) => ((input & DayMap) >> 16, input & HourMap);
+        uint Construct(uint days, uint hours) => ((days << 16) & DayMap) | (hours & HourMap);
+
+        public bool IsClashing(Timing t)
         {
-            foreach (var x in GenerateDaysOfWeek(days))
-                this.days |= 1 << (int)x;
+            foreach (var x in t.Entries)
+                foreach (var y in Entries)
+                {
+                    var (days, hours) = Deconstruct(x);
+                    var t2 = Deconstruct(y);
 
-            foreach (var x in GenerateHours(hours))
-                this.hours |= 1 << x;
+                    if ((hours & t2.hours) != 0 && (days & t2.days) != 0)
+                        return true;
+                }
+
+            return false;
         }
-
-        public bool IsClashing(Timing t) => (t.days & days) != 0 && (t.hours & hours) != 0;
 
         private IEnumerable<DayOfWeek> GenerateDaysOfWeek(string s)
         {
@@ -67,12 +70,7 @@ namespace Time_Table_Generator
 
         private IEnumerable<int> GenerateHours(string hours) => from x in hours.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) select int.Parse(x);
 
-        public override bool Equals(object obj)
-        {
-            if (obj is Timing t)
-                return t.days.Equals(days) && t.hours.Equals(hours);
-            return false;
-        }
+        public override bool Equals(object obj) => obj is Timing t && t.Entries.SequenceEqual(Entries);
 
         public override int GetHashCode()
         {
