@@ -52,7 +52,7 @@ namespace Time_Table_Generator
             return false;
         }
 
-        private IEnumerable<DayOfWeek> GenerateDaysOfWeek(string s)
+        private IEnumerable<int> GenerateDaysOfWeek(string s)
         {
             Dictionary<string, DayOfWeek> dict = new Dictionary<string, DayOfWeek>
             {
@@ -65,7 +65,7 @@ namespace Time_Table_Generator
             };
 
             foreach (var x in from a in s.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) select a.ToUpper())
-                yield return dict[x];
+                yield return (int)dict[x];
         }
 
         private IEnumerable<int> GenerateHours(string hours) => from x in hours.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) select int.Parse(x);

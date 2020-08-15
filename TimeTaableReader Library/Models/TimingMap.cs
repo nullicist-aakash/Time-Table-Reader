@@ -2,17 +2,21 @@
 {
     internal class TimingMap
     {
-        readonly int[] Record;
+        readonly uint[] Record;
 
         public TimingMap()
         {
-            Record = new int[7] { 0, 0, 0, 0, 0, 0, 0 };
+            Record = new uint[7] { 0, 0, 0, 0, 0, 0, 0 };
         }
 
         public TimingMap(Timing t) : this()
         {
-            foreach (var x in t.Days) 
-                Record[(int)x] = t.hours;
+            foreach (var entry in t.Entries)
+            {
+                var (days, hours) = Timing.Deconstruct(entry);
+                foreach (var x in Timing.Days(days))
+                    Record[x] |= days & Timing.HourMap;
+            }
         }
 
         public static TimingMap Union(TimingMap t1, TimingMap t2)
