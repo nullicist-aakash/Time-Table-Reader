@@ -1,5 +1,5 @@
 # Time-Table-Reader
-# About
+## About
 There are many Android, Mobile and Web Apps on three campuses of BITS Pilani to visualize time table, but there is no app for Windows 10 that  can do the same. This app was created considering the same and it accepts JSON file as time table which can be generated easily. 
 
 ## Install Instructions
