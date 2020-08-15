@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -79,9 +80,12 @@ namespace Time_Table__Windows_.Frames
             if (args.Reason == AutoSuggestionBoxTextChangeReason.SuggestionChosen)
                 AddCourseButton.IsEnabled = true;
             else if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            {
+                Regex regex = new Regex(sender.Text.ToUpper().Replace(" ", ".*"));
                 SuggestionsBox.ItemsSource = from x in Ref.AvailableCourses.Courses
-                                             where x.Course_Name.ToUpper().Contains(sender.Text.ToUpper())
+                                             where regex.Match(x.ToString().ToUpper()).Success
                                              select x;
+            }
         }
 
         private void AddCourseClicked(object sender, RoutedEventArgs e)

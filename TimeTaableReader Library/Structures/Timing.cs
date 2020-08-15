@@ -15,7 +15,7 @@ namespace TimeTableReader
         public static Timing GenerateEmptyTiming => new Timing("", "");
 
         [JsonConstructor]
-        public Timing(List<uint> input) => Entries.AddRange(input);
+        public Timing(List<uint> input) => Entries.AddRange(input ?? new List<uint>());
         public Timing(string days, string hours) : this((days, hours)) { }
         public Timing(IEnumerable<(string days, string hours)> input) : this(input.ToArray()) { }
         public Timing(params (string days, string hours)[] Timings)
@@ -71,7 +71,7 @@ namespace TimeTableReader
 
         IEnumerable<int> GenerateHours(string hours) => from x in hours.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) select int.Parse(x);
 
-        internal static IEnumerable<int> Hours(uint hours)
+        public static IEnumerable<int> Hours(uint hours)
         {
             for (int i = 1; i < 16; ++i)
                 if ((hours & 1 << i) != 0)

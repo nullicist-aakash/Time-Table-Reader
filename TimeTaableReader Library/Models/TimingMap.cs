@@ -1,8 +1,8 @@
 ﻿namespace TimeTableReader
 {
-    internal class TimingMap
+    public class TimingMap
     {
-        readonly uint[] Record;
+        public readonly uint[] Record;
 
         public TimingMap()
         {
@@ -15,7 +15,7 @@
             {
                 var (days, hours) = Timing.Deconstruct(entry);
                 foreach (var x in Timing.Days(days))
-                    Record[x] |= days & Timing.HourMap;
+                    Record[x] |= hours & Timing.HourMap;
             }
         }
 

@@ -43,7 +43,7 @@ namespace Time_Table__Windows_.Frames
 
             panel.Children.Add(new TextBlock
             {
-                Text = Entry.Type.ToString() + "\n" + Entry.Room,
+                Text = Entry.Type.ToString(),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 TextWrapping = TextWrapping.Wrap,
                 HorizontalTextAlignment = TextAlignment.Center
@@ -144,44 +144,31 @@ namespace Time_Table__Windows_.Frames
             }
         }
 
-        private IEnumerable<(DayOfWeek WeekDay, uint Hour, uint hours)> GetTimings(Timing timing)
+        private IEnumerable<(DayOfWeek WeekDay, uint Hour, uint hours)> GetTimings(Timing t)
         {
-            bool[] indices = new bool[16];
-            for (int i = 0; i < 16; ++i)
-                indices[i] = false;
+            var map = new TimingMap(t);
 
-            foreach (var x in timing.Hours.ToArray())
-                indices[x] = true;
+            for (int i = 0; i < map.Record.Length; ++i)
+                if (map.Record[i] != 0)
+                {
+                    var lst = new List<uint>();
 
-            int[] arr = new int[16];
-            for (int i = 0; i < 16; ++i)
-                arr[i] = 0;
+                    // Add
+                    foreach (var entry in Timing.Hours(map.Record[i]))
+                        lst.Add((uint)entry);
 
-            for (int i = 1; i < 16; ++i)
-                if (indices[i] == true)
-                    if (indices[i - 1] == true)
-                        arr[i] = arr[i - 1];
-                    else
-                        arr[i] = i;
+                    // Convert1
+                    var lst2 = new uint[16];
+                    uint lastIndex = lst[0];
+                    lst2[lastIndex]++;
+                    for (int j = 1; j < lst.Count; ++j)
+                        lst2[lst[j] == lst[j - 1] + 1 ? lastIndex : lastIndex = lst[j]]++;
 
-
-            uint[] count = new uint[16];
-            for (int i = 0; i < 16; ++i)
-                count[i] = 0;
-
-            foreach (var x in arr)
-                count[x]++;
-
-            List<(uint, uint)> final = new List<(uint, uint)>();
-            for (uint i = 1; i < 16; ++i)
-            {
-                if (count[i] != 0)
-                    final.Add((i, count[i]));
-            }
-
-            foreach (var x in timing.Days)
-                foreach (var y in final)
-                    yield return (x, y.Item1, y.Item2);
+                    // return
+                    for (uint j = 0; j < lst2.Length; ++j)
+                        if (lst2[j] > 0)
+                            yield return ((DayOfWeek)i, j, lst2[j]);
+                }
         }
     }
 }
