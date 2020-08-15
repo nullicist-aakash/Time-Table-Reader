@@ -12,12 +12,13 @@ namespace Time_Table_Generator
 
             TimeTable t;
 
-            using (var x = new ExcelToTimeTable { FileLoc = fileloc })
+            using (var x = new Goa_Parser { FileLoc = fileloc })
             {
                 x.Load();
                 Console.WriteLine("{0} : Loaded", DateTime.Now);
                 t = x.GenerateTimeTable();
             }
+
             Console.WriteLine("{0} : Import Completed", DateTime.Now);
 
             string JSON = JsonConvert.SerializeObject(t, Formatting.Indented);
