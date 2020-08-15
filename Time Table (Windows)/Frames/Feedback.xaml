@@ -13,7 +13,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <ComboBox Header="Previous FeedBacks" x:Name="combo" Grid.Row="0" HorizontalAlignment="Stretch" Margin="10,10,10,10"/>
+        <Button Content="New FeedBack" x:Name="combo" Grid.Row="0" HorizontalAlignment="Stretch" Margin="10,10,10,10"/>
         <WebView x:Name="webView1" Grid.Row="1"/>
         <ProgressRing Grid.Row="1" x:Name="Progress" HorizontalAlignment="Center" VerticalAlignment="Center" IsActive="True"/>
     </Grid>

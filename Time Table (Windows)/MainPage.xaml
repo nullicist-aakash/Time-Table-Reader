@@ -41,18 +41,14 @@
                         </NavigationViewItem.Icon>
                     </NavigationViewItem>
                     <NavigationViewItem Content="About" Tapped="ShowAbout">
-                        <NavigationViewItem.Icon>
-                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;">
-
-                            </FontIcon>
-                        </NavigationViewItem.Icon>
                         <FlyoutBase.AttachedFlyout>
                             <Flyout>
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="About" FontSize="20"/>
                                     <TextBlock/>
-                                    <TextBlock Text="Time Table Demo"/>
-                                    <TextBlock Text="© 2020 Aakash All Rights Reserved"/>
+                                    <TextBlock FontWeight="Bold" Text="Time Table Demo"/>
+                                    <TextBlock Text="Aakash Gupta"/>
+                                    <HyperlinkButton Content="https://github.com/AakashBitspilani/Time-Table-Reader" NavigateUri="https://github.com/AakashBitspilani/Time-Table-Reader"/>
                                 </StackPanel>
                             </Flyout>
                         </FlyoutBase.AttachedFlyout>
