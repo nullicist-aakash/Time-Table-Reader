@@ -38,7 +38,7 @@ namespace Time_Table_Generator
                 COMCOD = int.Parse(courseEntry[0][0]),
                 CourseNo_Dept = courseEntry[0][1].Split(' ')[0],
                 CourseNo_Id = courseEntry[0][1].Split(' ')[1],
-                Course_Name = courseEntry[0][2],
+                Course_Name = courseEntry[0][2].Replace("\n", "").Replace("\r", ""),
                 Credits = new Credit
                 {
                     Lecture = GetCredit(courseEntry[0][3]),
@@ -46,7 +46,7 @@ namespace Time_Table_Generator
                     Units = GetCredit(courseEntry[0][5])
                 }
             };
-            Console.WriteLine("Working on {0}", course.Course_Name);
+            Console.WriteLine("{0} : Processing course : {1}", DateTime.Now, course.Course_Name);
 
             var ClassIndices = FindStartIndices(courseEntry, 2);
             var Ranges = FindRanges(ClassIndices);

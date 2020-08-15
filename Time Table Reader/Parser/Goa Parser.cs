@@ -8,7 +8,6 @@ namespace Time_Table_Generator
 {
     class Goa_Parser : ExcelToTimeTable
     {
-
         protected override TimeTable DoGenerateTimeTable(List<string[]> contents)
         {
             var courses_splitted = from x in contents select GetCourseList(x);
@@ -107,7 +106,7 @@ namespace Time_Table_Generator
             else if (units.Count == 1 && type == "P")
                 credits = new Credit { Lecture = 0, Practical = units[0], Units = units[0] };
             else
-                credits = new Credit { Lecture = units[0], Practical = units[0], Units = units[0] };
+                credits = new Credit { Lecture = units[0], Practical = units[1], Units = units[2] };
 
             return credits;
         }
@@ -119,19 +118,40 @@ namespace Time_Table_Generator
 
             var splits = cell.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
+            var EntryType = new bool[splits.Length];
+            for (int i = 0; i < splits.Length; ++i)
+                    EntryType[i] = int.TryParse(splits[i], out _);
+
+            var SplitIndices = new List<int> { 0 };
+
+            for (int i = 0; i < splits.Length - 1; ++i)
+                if (EntryType[i] && !EntryType[i + 1])  // Transition from int to day entry
+                    SplitIndices.Add(i + 1);
+            SplitIndices.Add(splits.Length);
+
+            var Ranges = new List<(int StartIndex, int Length)>();
+            for (int i = 0; i < SplitIndices.Count - 1; ++i)
+                Ranges.Add((SplitIndices[i], SplitIndices[i + 1] - SplitIndices[i]));
+
+            var finalList = from x in Ranges select ParseString(splits, EntryType, x.StartIndex, x.Length);
+
+            return new Timing(finalList.ToArray());
+        }
+
+        (string days, string hours) ParseString(string[] entries, bool[] EntryType, int startIndex, int count)
+        {
             var days = new List<string>();
-            var hours = new List<int>();
+            var hours = new List<string>();
 
-            foreach (var x in splits)
-                if (int.TryParse(x, out int converted))
-                    hours.Add(converted);
+            for (int i = startIndex; i < startIndex + count; ++i)
+                if (EntryType[i] == false)  //  Day
+                    days.Add(entries[i]);
                 else
-                    days.Add(x);
+                    hours.Add(entries[i]);
 
-            return new Timing(string.Join(" ", days), string.Join(" ", hours));
+            return (string.Join(" ", days), string.Join(" ", hours));
         }
     }
-
 
     internal class IntermediateStructure
     {

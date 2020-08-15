@@ -8,11 +8,11 @@ namespace Time_Table_Generator
     {
         static void Main(string[] args)
         {
-            string fileloc = @"D:\G - Projects\Time Table Khurapat\Goa.xlsx";
+            string fileloc = @"D:\G - Projects\Time Table Khurapat\Pilani.xlsx";
 
             TimeTable t;
 
-            using (var x = new Goa_Parser { FileLoc = fileloc })
+            using (var x = new Pilani_Parser { FileLoc = fileloc })
             {
                 x.Load();
                 Console.WriteLine("{0} : Loaded", DateTime.Now);
@@ -26,7 +26,7 @@ namespace Time_Table_Generator
 
             Console.WriteLine("JSON Conversion Completed");
 
-            File.WriteAllText(@"D:\G - Projects\Time Table Khurapat\Goa.Json", JSON);
+            File.WriteAllText(@"D:\G - Projects\Time Table Khurapat\Pilani.Json", JSON);
         }
     }
 }

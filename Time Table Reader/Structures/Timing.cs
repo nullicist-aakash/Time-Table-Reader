@@ -24,7 +24,7 @@ namespace Time_Table_Generator
             {
                 uint day = 0, hour = 0;
                 foreach (var x in GenerateDaysOfWeek(days))
-                    day |= (uint)(1 << (int)x);
+                    day |= (uint)(1 << x);
 
                 foreach (var x in GenerateHours(hours))
                     hour |= (uint)(1 << x);

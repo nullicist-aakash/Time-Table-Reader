@@ -46,6 +46,7 @@ namespace Time_Table_Generator
                     Units = GetCredit(courseEntry[0][5])
                 }
             };
+            Console.WriteLine("{0} : Processing course : {1}", DateTime.Now, course.Course_Name);
 
             var ClassIndices = FindStartIndices(courseEntry, 2);
             var Ranges = FindRanges(ClassIndices);
