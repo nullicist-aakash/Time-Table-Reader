@@ -8,7 +8,7 @@ namespace Time_Table_Generator
     {
         static void Main(string[] args)
         {
-            string fileloc = @"D:\G - Projects\Time Table Khurapat\Pilani.xlsx";
+            string fileloc = @"D:\G - Projects\Time Table Khurapat\Pilani New.xlsx";
 
             TimeTable t;
 

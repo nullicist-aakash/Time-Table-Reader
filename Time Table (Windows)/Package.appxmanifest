@@ -9,7 +9,7 @@
   <Identity
     Name="58af5c8c-8abc-48dd-a331-2f6d69a9de0a"
     Publisher="CN=Aakash"
-    Version="1.0.0.0" />
+    Version="1.1.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="58af5c8c-8abc-48dd-a331-2f6d69a9de0a" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

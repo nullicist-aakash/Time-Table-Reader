@@ -33,8 +33,16 @@ namespace Time_Table_Generator
 
         public TimeTable GenerateTimeTable()
         {
+            var mainList = new List<string[]>();
+            foreach (Worksheet xlWorkSheet in Workbook.Sheets)
+            {
+                var list = ExtractRows(xlWorkSheet.UsedRange);
+                if (list.Count > 0)
+                    list.RemoveAt(0);
+                mainList.AddRange(list);
+            }
             var contents = ExtractRows(Worksheet.UsedRange);
-            return DoGenerateTimeTable(contents);
+            return DoGenerateTimeTable(mainList);
         }
 
         protected abstract TimeTable DoGenerateTimeTable(List<string[]> contents);

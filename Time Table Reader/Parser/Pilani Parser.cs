@@ -141,11 +141,11 @@ namespace Time_Table_Generator
                 SectionNo = int.Parse(FirstLine[6])
             };
 
-            (section.Room, section.ClassTiming) = GetDayTimeLoc(days: FirstLine[9], hours: FirstLine[10], room: FirstLine[8]);
+            (section.Room, section.ClassTiming) = GetDayTimeLoc(days: FirstLine[10], hours: FirstLine[11], room: FirstLine[9]);
 
-            if (FirstLine[11] == "")
-                FirstLine[11] = "  ";
-            var s = FirstLine[11].Split(' ');
+            if (FirstLine[12] == "")
+                FirstLine[12] = "  ";
+            var s = FirstLine[12].Split(' ');
 
             (section.CommonHourRoom, section.CommonHourTiming) = GetDayTimeLoc(days: s[0], hours: s[1], room: s[2]);
 
