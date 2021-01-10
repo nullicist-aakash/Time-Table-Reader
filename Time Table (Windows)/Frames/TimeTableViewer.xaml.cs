@@ -135,12 +135,12 @@ namespace Time_Table__Windows_.Frames
                 model = course.PracticalComponent.SelectedModel;
                 if (model != null)
                     foreach (var (WeekDay, Hour, hours) in GetTimings(model.ClassTiming))
-                        yield return (course.Course_Name, "Lecture", model.Teachers, WeekDay, Hour, hours, model.RoomNo);
+                        yield return (course.Course_Name, "Practical", model.Teachers, WeekDay, Hour, hours, model.RoomNo);
 
                 model = course.TutorialComponent.SelectedModel;
                 if (model != null)
                     foreach (var (WeekDay, Hour, hours) in GetTimings(model.ClassTiming))
-                        yield return (course.Course_Name, "Lecture", model.Teachers, WeekDay, Hour, hours, model.RoomNo);
+                        yield return (course.Course_Name, "Tutorial", model.Teachers, WeekDay, Hour, hours, model.RoomNo);
             }
         }
 

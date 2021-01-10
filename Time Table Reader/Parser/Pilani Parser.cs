@@ -71,7 +71,7 @@ namespace Time_Table_Generator
 
         private IEnumerable<Section> GenerateClassEntries(List<string[]> classes)
         {
-            classes[0][6] = "1";
+            classes[0][6] = "L1";
             var ClassIndices = FindStartIndices(classes, 6);
             var Ranges = FindRanges(ClassIndices);
             var SplittedRows = GetRangeRows(classes, Ranges);
@@ -133,19 +133,68 @@ namespace Time_Table_Generator
             return (int.Parse(room), new Timing(days, hours));
         }
 
+        (int Room, Timing timing) GetNewDayTimeLoc(string daytime, string room)
+        {
+            if (string.IsNullOrWhiteSpace(room))
+                room = "-1";
+            if (string.IsNullOrWhiteSpace(daytime))
+                return (int.Parse(room), Timing.GenerateEmptyTiming);
+
+            var splitted = daytime.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var split_indices = new List<int>();
+
+            #region SplitIndices
+            split_indices.Add(0);
+
+            for (int i = 1; i < splitted.Length; ++i)
+            {
+                bool prev_time = int.TryParse(splitted[i - 1], out _);
+                bool cur_time = int.TryParse(splitted[i], out _);
+
+                if ((prev_time && !cur_time) || (!prev_time && cur_time))
+                    split_indices.Add(i);
+            }
+            split_indices.Add(splitted.Length);
+
+            #endregion
+
+            var entries = new List<string>[2]
+            {
+                new List<string>(),
+                new List<string>()
+            };
+
+            for (int i = 0; i < split_indices.Count - 1; ++i)
+            {
+                int start_index = split_indices[i];
+                int end_index = split_indices[i + 1];
+                var entrs = new List<string>();
+                for (int j = start_index; j < end_index; ++j)
+                    entrs.Add(splitted[j]);
+
+                entries[i % 2].Add(string.Join(" ", entrs));
+            }
+
+            var lst = new List<(string days, string hours)>();
+            for (int i = 0; i < entries[0].Count; ++i)
+                lst.Add((entries[0][i], entries[1][i]));
+
+            return (int.Parse(room), new Timing(lst));
+        }
+
         public Section GenerateSection(List<string[]> rows)
         {
             var FirstLine = rows[0];
             var section = new Section
             {
-                SectionNo = int.Parse(FirstLine[6])
+                SectionNo = int.Parse(FirstLine[6].Substring(1))
             };
 
-            (section.Room, section.ClassTiming) = GetDayTimeLoc(days: FirstLine[10], hours: FirstLine[11], room: FirstLine[9]);
+            (section.Room, section.ClassTiming) = GetNewDayTimeLoc(daytime: FirstLine[9], room: FirstLine[8]);
 
-            if (FirstLine[12] == "")
-                FirstLine[12] = "  ";
-            var s = FirstLine[12].Split(' ');
+            if (FirstLine[10] == "")
+                FirstLine[10] = "  ";
+            var s = FirstLine[10].Split(' ');
 
             (section.CommonHourRoom, section.CommonHourTiming) = GetDayTimeLoc(days: s[0], hours: s[1], room: s[2]);
 
