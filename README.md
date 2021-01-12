@@ -10,15 +10,13 @@ There are many Android, Mobile and Web Apps on three campuses of BITS Pilani to 
 
 ## JSON Files are included for
 - [x] Pilani
-- [x] Hyderabad
-- [x] Goa
+- [ ] Hyderabad
+- [ ] Goa
 
 Download Link: https://drive.google.com/drive/folders/1P6iBRNMzmm9cXokW3nvq-S17xp-EfiBa?usp=sharing
 
-## New Additions
+## New Additions (as of version 1.0.0.0)
 1. Goa Time Table now Supported.
 2. Time Table range is 8:00 am to 7:50 pm.
 3. Now you can search course by course ID also.
 4. Feedback "App UI" changed.
-## Points to remember
-1. JSON files of version 1.0.0.0 are not supported, so download new JSON files from above link.
