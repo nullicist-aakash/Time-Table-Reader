@@ -5,10 +5,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{75D0389B-0C01-443A-A10A-D8FA6FCF68D5}</ProjectGuid>
+    <ProjectGuid>{ABBF3E0B-A00E-4815-824F-941CD57C9D42}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Time_Table_Reader</RootNamespace>
-    <AssemblyName>Time Table Reader</AssemblyName>
+    <RootNamespace>Time_Table_Database</RootNamespace>
+    <AssemblyName>Time Table Database</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -42,16 +42,24 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <HintPath>..\..\Time Table Generator\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+    <Reference Include="MySql.Data.EntityFramework, Version=8.0.22.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.EntityFramework.8.0.22\lib\net452\MySql.Data.EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,23 +68,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Parser\Goa Parser.cs" />
-    <Compile Include="Parser\Hyderabad Parser.cs" />
-    <Compile Include="Parser\Pilani Parser.cs" />
-    <Compile Include="Structures\Course.cs" />
-    <Compile Include="Structures\Credit.cs" />
-    <Compile Include="Parser\ExcelToTimeTable.cs" />
+    <Compile Include="Core\TimeTableContext.cs" />
+    <Compile Include="DataModels\Database Models\Course.cs" />
+    <Compile Include="DataModels\Database Models\ESectionType.cs" />
+    <Compile Include="DataModels\Database Models\Section.cs" />
+    <Compile Include="DataModels\Database Models\SelectedEntries.cs" />
+    <Compile Include="DataModels\Database Models\Teacher.cs" />
+    <Compile Include="DataModels\Database Models\Timing.cs" />
+    <Compile Include="DataModels\JSON Models\Course.cs" />
+    <Compile Include="DataModels\JSON Models\Credit.cs" />
+    <Compile Include="DataModels\JSON Models\Section.cs" />
+    <Compile Include="DataModels\JSON Models\Teacher.cs" />
+    <Compile Include="DataModels\JSON Models\TimeTable.cs" />
+    <Compile Include="DataModels\JSON Models\Timing.cs" />
+    <Compile Include="Migrations\202103071149330_TablesGenerated.cs" />
+    <Compile Include="Migrations\202103071149330_TablesGenerated.designer.cs">
+      <DependentUpon>202103071149330_TablesGenerated.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Structures\Section.cs" />
-    <Compile Include="Structures\Teacher.cs" />
-    <Compile Include="Structures\TimeTable.cs" />
-    <Compile Include="Structures\Timing.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202103071149330_TablesGenerated.resx">
+      <DependentUpon>202103071149330_TablesGenerated.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
