@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
-namespace Time_Table__Windows_.Frames
+namespace Time_Table_Reader_UWP.Frames
 {
     public sealed partial class Feedback : Page
     {

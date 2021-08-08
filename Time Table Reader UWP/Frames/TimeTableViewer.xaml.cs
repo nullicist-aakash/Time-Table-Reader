@@ -1,32 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using TimeTableReader;
 using Windows.UI.Text;
 using Windows.UI;
 
-namespace Time_Table__Windows_.Frames
+namespace Time_Table_Reader_UWP.Frames
 {
     public sealed partial class TimeTableViewer : Page
     {
         public TimeTableModel Ref => Global.Instance.SelectedCourses;
 
-        readonly bool[,] arr = new bool[6, 13];
+        private readonly bool[,] arr = new bool[6, 13];
 
         public TimeTableViewer()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         public Button GetView((string Title, string Type, List<Teacher> Teachers, DayOfWeek WeekDay, uint Hour, uint hours, string Room) Entry)

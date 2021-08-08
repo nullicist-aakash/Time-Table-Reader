@@ -13,8 +13,11 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace Time_Table__Windows_
+// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+
+namespace Time_Table_Reader_UWP
 {
+
     public sealed partial class MainPage : Page
     {
         private readonly LinkedList<(NavigationViewItem item, Type type, string header, Frame frame)> list = new LinkedList<(NavigationViewItem, Type, string, Frame)>();

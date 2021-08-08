@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="58af5c8c-8abc-48dd-a331-2f6d69a9de0a"
-    Publisher="CN=Aakash"
-    Version="1.1.0.0" />
+    Name="d9a7e485-3903-4701-aa5c-7e823ded9e21"
+    Publisher="CN=RG"
+    Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="58af5c8c-8abc-48dd-a331-2f6d69a9de0a" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="d9a7e485-3903-4701-aa5c-7e823ded9e21" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Time Table (Windows)</DisplayName>
-    <PublisherDisplayName>dell</PublisherDisplayName>
+    <DisplayName>Time Table Reader UWP</DisplayName>
+    <PublisherDisplayName>RG</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -30,18 +30,14 @@
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="Time_Table__Windows_.App">
+      EntryPoint="Time_Table_Reader_UWP.App">
       <uap:VisualElements
-        DisplayName="Time Table (Windows)"
+        DisplayName="Time Table Reader UWP"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="Time Table (Windows)"
+        Description="Time Table Reader UWP"
         BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png" ShortName="BITS Pilani">
-          <uap:ShowNameOnTiles>
-            <uap:ShowOn Tile="wide310x150Logo"/>
-          </uap:ShowNameOnTiles>
-        </uap:DefaultTile >
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
     </Application>
