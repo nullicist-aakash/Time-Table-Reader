@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTableReader Library", "TimeTaableReader Library\TimeTableReader Library.csproj", "{336D820F-FDD6-4C83-8E05-8E2208BB6495}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Time Table (Windows)", "Time Table (Windows)\Time Table (Windows).csproj", "{44340CB7-8073-44F8-9545-D861D3D2EBC2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Time Table Reader", "Time Table Reader\Time Table Reader.csproj", "{75D0389B-0C01-443A-A10A-D8FA6FCF68D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Time Table Reader UWP Library", "Time Table Reader UWP Library\Time Table Reader UWP Library.csproj", "{373021B0-8A0A-4E06-B0D8-DBFD631F563C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,26 +23,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Debug|ARM.ActiveCfg = Debug|ARM
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Debug|ARM.Build.0 = Debug|ARM
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Debug|ARM64.ActiveCfg = Debug|ARM64
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Debug|ARM64.Build.0 = Debug|ARM64
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Debug|x64.ActiveCfg = Debug|x64
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Debug|x64.Build.0 = Debug|x64
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Debug|x86.ActiveCfg = Debug|x86
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Debug|x86.Build.0 = Debug|x86
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Release|Any CPU.Build.0 = Release|Any CPU
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Release|ARM.ActiveCfg = Release|ARM
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Release|ARM.Build.0 = Release|ARM
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Release|ARM64.ActiveCfg = Release|ARM64
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Release|ARM64.Build.0 = Release|ARM64
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Release|x64.ActiveCfg = Release|x64
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Release|x64.Build.0 = Release|x64
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Release|x86.ActiveCfg = Release|x86
-		{336D820F-FDD6-4C83-8E05-8E2208BB6495}.Release|x86.Build.0 = Release|x86
 		{44340CB7-8073-44F8-9545-D861D3D2EBC2}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{44340CB7-8073-44F8-9545-D861D3D2EBC2}.Debug|Any CPU.Build.0 = Debug|x86
 		{44340CB7-8073-44F8-9545-D861D3D2EBC2}.Debug|Any CPU.Deploy.0 = Debug|x86
@@ -91,6 +71,26 @@ Global
 		{75D0389B-0C01-443A-A10A-D8FA6FCF68D5}.Release|x64.Build.0 = Release|Any CPU
 		{75D0389B-0C01-443A-A10A-D8FA6FCF68D5}.Release|x86.ActiveCfg = Release|Any CPU
 		{75D0389B-0C01-443A-A10A-D8FA6FCF68D5}.Release|x86.Build.0 = Release|Any CPU
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Debug|ARM.ActiveCfg = Debug|ARM
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Debug|ARM.Build.0 = Debug|ARM
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Debug|ARM64.Build.0 = Debug|ARM64
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Debug|x64.ActiveCfg = Debug|x64
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Debug|x64.Build.0 = Debug|x64
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Debug|x86.ActiveCfg = Debug|x86
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Debug|x86.Build.0 = Debug|x86
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Release|ARM.ActiveCfg = Release|ARM
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Release|ARM.Build.0 = Release|ARM
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Release|ARM64.ActiveCfg = Release|ARM64
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Release|ARM64.Build.0 = Release|ARM64
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Release|x64.ActiveCfg = Release|x64
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Release|x64.Build.0 = Release|x64
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Release|x86.ActiveCfg = Release|x86
+		{373021B0-8A0A-4E06-B0D8-DBFD631F563C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
