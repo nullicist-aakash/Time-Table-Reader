@@ -123,9 +123,6 @@
     <Compile Include="Frames\Course Selector.xaml.cs">
       <DependentUpon>Course Selector.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Frames\Feedback.xaml.cs">
-      <DependentUpon>Feedback.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Frames\Section Selector.xaml.cs">
       <DependentUpon>Section Selector.xaml</DependentUpon>
     </Compile>
@@ -202,10 +199,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Frames\Course Selector.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Frames\Feedback.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

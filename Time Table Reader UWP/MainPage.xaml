@@ -34,13 +34,11 @@
             </NavigationView.MenuItems>
             <NavigationView.PaneFooter>
                 <StackPanel>
-                    <NavigationViewItem Content="FeedBack" x:Name="FeedBack">
+                    <NavigationViewItem Content="About" Tapped="ShowAbout">
                         <NavigationViewItem.Icon>
-                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xED15;">
+                            <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;">
                             </FontIcon>
                         </NavigationViewItem.Icon>
-                    </NavigationViewItem>
-                    <NavigationViewItem Content="About" Tapped="ShowAbout">
                         <FlyoutBase.AttachedFlyout>
                             <Flyout>
                                 <StackPanel Orientation="Vertical">
