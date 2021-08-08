@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.Office.Interop.Excel;
+using Range = Microsoft.Office.Interop.Excel.Range;
 
 namespace Time_Table_Generator
 {
@@ -43,17 +44,16 @@ namespace Time_Table_Generator
                     list.RemoveAt(0);
                 mainList.AddRange(list);
             }
-            var contents = ExtractRows(Worksheet.UsedRange);
             return DoGenerateTimeTable(mainList);
         }
 
         protected abstract TimeTable DoGenerateTimeTable(List<string[]> contents);
 
-        private List<string[]> ExtractRows(Range range)
+        private static List<string[]> ExtractRows(Range range)
         {
             int TotalRows = range.Rows.Count;
             int TotalColumns = range.Columns.Count;
-            object[,] array = range.Cells.Value;
+            object[,] array = (object[,])range.Cells.Value;
 
             List<string[]> Content = new List<string[]>();
 

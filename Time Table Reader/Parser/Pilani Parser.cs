@@ -6,139 +6,29 @@ using System.Threading.Tasks;
 
 namespace Time_Table_Generator
 {
-    class Pilani_Parser : ExcelToTimeTable
+    class PilaniRow
     {
-        protected override TimeTable DoGenerateTimeTable(List<string[]> contents)
+        List<string> Row { get; } = new List<string>();
+
+        public static int ClassTypeIndex => 2;
+        public static int SectionIndex => 6;
+
+        public PilaniRow(string[] row)
         {
-            var SplittedCourses = SplitCourses(contents);
-
-            var tt = new TimeTable();
-            tt.Courses.AddRange(from x in SplittedCourses select GenerateCourses(x));
-
-            return tt;
+            foreach (var x in row)
+                Row.Add(x);
         }
 
-        private List<List<string[]>> SplitCourses(List<string[]> allRows)
-        {
-            if (allRows.Count == 0)
-                return new List<List<string[]>>();
-            if (allRows.Count == 1)
-                return new List<List<string[]>> { allRows };
-
-            var _startIndices = FindStartIndices(allRows);
-            var _ranges = FindRanges(_startIndices);
-
-            return GetRangeRows(allRows, _ranges);
-        }
-
-        private Course GenerateCourses(List<string[]> courseEntry)
-        {
-            var course = new Course
-            {
-                COMCOD = int.Parse(courseEntry[0][0]),
-                CourseNo_Dept = courseEntry[0][1].Split(' ')[0],
-                CourseNo_Id = courseEntry[0][1].Split(' ')[1],
-                Course_Name = courseEntry[0][2],
-                Credits = new Credit
-                {
-                    Lecture = GetCredit(courseEntry[0][3]),
-                    Practical = GetCredit(courseEntry[0][4]),
-                    Units = GetCredit(courseEntry[0][5])
-                }
-            };
-            Console.WriteLine("{0} : Processing course : {1}", DateTime.Now, course.Course_Name);
-
-            var ClassIndices = FindStartIndices(courseEntry, 2);
-            var Ranges = FindRanges(ClassIndices);
-            var SplittedRows = GetRangeRows(courseEntry, Ranges);
-
-            if (SplittedRows.Count > 0)
-                course.GeneralClass.AddRange(GenerateClassEntries(SplittedRows[0]));
-
-            for (int i = 1; i < SplittedRows.Count; ++i)
-            {
-                var classes = GenerateClassEntries(SplittedRows[i]);
-
-                if (SplittedRows[i][0][2].ToUpper() == "TUTORIAL")
-                    course.TutorialClass.AddRange(classes);
-                else if (SplittedRows[i][0][2].ToUpper() == "PRACTICAL")
-                    course.PracticalClass.AddRange(classes);
-                else
-                    throw new Exception("Help me!! I was not designed to do this. Something bad happened in course " + course.Course_Name);
-            }
-            return course;
-        }
-
-        private IEnumerable<Section> GenerateClassEntries(List<string[]> classes)
-        {
-            classes[0][6] = "L1";
-            var ClassIndices = FindStartIndices(classes, 6);
-            var Ranges = FindRanges(ClassIndices);
-            var SplittedRows = GetRangeRows(classes, Ranges);
-
-            foreach (var section in SplittedRows)
-                yield return GenerateSection(section);
-        }
-
-        List<int> FindStartIndices(List<string[]> rows, int CheckIndex = 0)
-        {
-            var StartIndices = new List<int>();
-
-            for (int i = 0; i < rows.Count; ++i)
-                if (rows[i][CheckIndex] != "")
-                    StartIndices.Add(i);
-            StartIndices.Add(rows.Count);
-            return StartIndices;
-        }
-
-        List<(int StartIndex, int Length)> FindRanges(List<int> startIndices)
-        {
-            var Range = new List<(int StartIndex, int Length)>();
-
-            for (int i = 0; i < startIndices.Count - 1; ++i)
-                Range.Add((startIndices[i], startIndices[i + 1] - startIndices[i]));
-            //     Range.Add((startIndices[startIndices.Count - 2], startIndices.Count - startIndices[startIndices.Count - 1]));
-
-            return Range;
-        }
-
-        List<List<string[]>> GetRangeRows(List<string[]> rows, List<(int StartIndex, int Length)> range)
-        {
-            var lst = new List<List<string[]>>();
-
-            foreach (var (StartIndex, Length) in range)
-            {
-                lst.Add(new List<string[]>());
-
-                for (int i = 0; i < Length; ++i)
-                    lst[lst.Count - 1].Add(rows[StartIndex + i]);
-
-            }
-
-            return lst;
-        }
-
-        int GetCredit(string input)
+        static int GetCredit(string input)
         {
             if (int.TryParse(input, out int ex))
                 return ex;
             return 0;
         }
-
-        (int Room, Timing timing) GetDayTimeLoc(string days, string hours, string room)
+        static Timing GetTiming(string daytime)
         {
-            if (string.IsNullOrWhiteSpace(room))
-                room = "-1";
-
-            return (int.Parse(room), new Timing(days, hours));
-        }
-
-        (int Room, Timing timing) GetNewDayTimeLoc(string daytime, string room)
-        {
-            if (string.IsNullOrWhiteSpace(room))
-                room = "-1";
             if (string.IsNullOrWhiteSpace(daytime))
-                return (int.Parse(room), Timing.GenerateEmptyTiming);
+                return Timing.GenerateEmptyTiming;
 
             var splitted = daytime.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             var split_indices = new List<int>();
@@ -179,28 +69,180 @@ namespace Time_Table_Generator
             for (int i = 0; i < entries[0].Count; ++i)
                 lst.Add((entries[0][i], entries[1][i]));
 
-            return (int.Parse(room), new Timing(lst));
+            return new Timing(lst);
         }
 
-        public Section GenerateSection(List<string[]> rows)
+        public int COMCOD => int.Parse(Row[0]);
+        public string CourseNo_Dept => Row[1].Split(' ')[0];
+        public string CourseNo_Id => Row[1].Split(' ')[1];
+        public string Course_Name => Row[2];
+        public int LectureUnits => GetCredit(Row[3]);
+        public int PracticalUnits => GetCredit(Row[4]);
+        public int TotalUnits => GetCredit(Row[5]);
+        public Section Section => new Section() { SectionNo = int.Parse(Row[6].EndsWith("N") ? Row[6].Substring(1, Row[6].Length - 2) :  Row[6].Substring(1)) };
+        public string TeacherName => Row[7];
+        public int RoomNo
         {
-            var FirstLine = rows[0];
-            var section = new Section
+            get
             {
-                SectionNo = int.Parse(FirstLine[6].Substring(1))
-            };
+                var room = Row[8];
+                if (string.IsNullOrWhiteSpace(room))
+                    room = "-1";
+                return int.Parse(room);
+            }
+        }
+        public Timing Timing => GetTiming(Row[9]);
+        public int CommonRoomVenue
+        {
+            get
+            {
+                if (Row[10] == "")
+                    Row[10] = "  ";
+                var room = Row[10].Split(' ')[0];
+                if (string.IsNullOrWhiteSpace(room) || !int.TryParse(room, out _))
+                    room = "-1";
+                return int.Parse(room);
+            }
+        }
+        public Timing CommonRoomTiming
+        {
+            get
+            {
+                if (Row[10] == "")
+                    Row[10] = "  ";
+                var s = Row[10].Split(' ');
+                return new Timing(s[0], s[1]);
+            }
+        }
+    }
 
-            (section.Room, section.ClassTiming) = GetNewDayTimeLoc(daytime: FirstLine[9], room: FirstLine[8]);
+    class Pilani_Parser : ExcelToTimeTable
+    {
+        static List<int> FindStartIndices(List<string[]> rows, int CheckIndex = 0)
+        {
+            var StartIndices = new List<int>();
 
-            if (FirstLine[10] == "")
-                FirstLine[10] = "  ";
-            var s = FirstLine[10].Split(' ');
+            for (int i = 0; i < rows.Count; ++i)
+                if (rows[i][CheckIndex] != "")
+                    StartIndices.Add(i);
+            StartIndices.Add(rows.Count);
+            return StartIndices;
+        }
 
-            (section.CommonHourRoom, section.CommonHourTiming) = GetDayTimeLoc(days: s[0], hours: s[1], room: s[2]);
+        static List<(int StartIndex, int Length)> FindRanges(List<int> startIndices)
+        {
+            var Range = new List<(int StartIndex, int Length)>();
 
-            section.Teachers.AddRange(from row in rows select TeacherGenerator.GenerateTeacher(row[7]));
+            for (int i = 0; i < startIndices.Count - 1; ++i)
+                Range.Add((startIndices[i], startIndices[i + 1] - startIndices[i]));
+            //     Range.Add((startIndices[startIndices.Count - 2], startIndices.Count - startIndices[startIndices.Count - 1]));
+
+            return Range;
+        }
+
+        static List<List<string[]>> GetRangeRows(List<string[]> rows, List<(int StartIndex, int Length)> range)
+        {
+            var lst = new List<List<string[]>>();
+
+            foreach (var (StartIndex, Length) in range)
+            {
+                lst.Add(new List<string[]>());
+
+                for (int i = 0; i < Length; ++i)
+                    lst[lst.Count -1].Add(rows[StartIndex + i]);
+            }
+
+            return lst;
+        }
+
+        private static List<List<string[]>> SplitCourses(List<string[]> allRows)
+        {
+            if (allRows.Count == 0)
+                return new List<List<string[]>>();
+            if (allRows.Count == 1)
+                return new List<List<string[]>> { allRows };
+
+            var _startIndices = FindStartIndices(allRows);
+            var _ranges = FindRanges(_startIndices);
+
+            return GetRangeRows(allRows, _ranges);
+        }
+
+        public static Section GenerateSection(List<string[]> rows)
+        {
+            PilaniRow row = new PilaniRow(rows[0]);
+            var section = row.Section;
+            section.Room = row.RoomNo;
+            section.ClassTiming = row.Timing;
+            section.CommonHourRoom = row.CommonRoomVenue;
+            section.CommonHourTiming = row.CommonRoomTiming;
+
+            section.Teachers.AddRange(from r in rows select TeacherGenerator.GenerateTeacher(new PilaniRow(r).TeacherName));
 
             return section;
+        }
+
+        private static IEnumerable<Section> GenerateClassEntries(List<string[]> classes)
+        {
+            classes[0][PilaniRow.SectionIndex] = "L1";
+            var ClassIndices = FindStartIndices(classes, 6);
+            var Ranges = FindRanges(ClassIndices);
+            var SplittedRows = GetRangeRows(classes, Ranges);
+
+            foreach (var section in SplittedRows)
+                yield return GenerateSection(section);
+        }
+
+        private static Course GenerateCourses(List<string[]> courseEntry)
+        {
+            PilaniRow row = new PilaniRow(courseEntry[0]);
+
+            var course = new Course
+            {
+                COMCOD = row.COMCOD,
+                CourseNo_Dept = row.CourseNo_Dept,
+                CourseNo_Id = row.CourseNo_Id,
+                Course_Name = row.Course_Name,
+                Credits = new Credit
+                {
+                    Lecture = row.LectureUnits,
+                    Practical = row.PracticalUnits,
+                    Units = row.TotalUnits
+                }
+            };
+            Console.WriteLine("{0} : Processing course : {1}", DateTime.Now, course.Course_Name);
+
+            var ClassIndices = FindStartIndices(courseEntry, 2);
+            var Ranges = FindRanges(ClassIndices);
+            var SplittedRows = GetRangeRows(courseEntry, Ranges);
+
+            if (SplittedRows.Count > 0)
+                course.GeneralClass.AddRange(GenerateClassEntries(SplittedRows[0]));
+
+            for (int i = 1; i < SplittedRows.Count; ++i)
+            {
+                var classes = GenerateClassEntries(SplittedRows[i]);
+
+                var sectionType = SplittedRows[i][0][PilaniRow.ClassTypeIndex].ToUpper();
+
+                if (sectionType == "TUTORIAL")
+                    course.TutorialClass.AddRange(classes);
+                else if (sectionType == "PRACTICAL")
+                    course.PracticalClass.AddRange(classes);
+                else
+                    throw new Exception("Help me!! I was not designed to do this. Something bad happened in course " + course.Course_Name);
+            }
+            return course;
+        }
+
+        protected override TimeTable DoGenerateTimeTable(List<string[]> contents)
+        {
+            var SplittedCourses = SplitCourses(contents);
+
+            var tt = new TimeTable();
+            tt.Courses.AddRange(from x in SplittedCourses select GenerateCourses(x));
+
+            return tt;
         }
     }
 }
