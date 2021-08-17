@@ -10,13 +10,12 @@ namespace Time_Table_Generator
     {
         static void Main(string[] args)
         {
-            string fileloc = @"E:\Time Table Reader\Timetable_4thAug_2021.xlsx";
+            string fileloc = @"D:\DELs.xlsx";
 
             TimeTable t;
 
             using (var x = new Pilani_Parser { FileLoc = fileloc })
             {
-                Console.WriteLine("1");
                 x.Load();
                 Console.WriteLine("{0} : Loaded", DateTime.Now);
                 t = x.GenerateTimeTable();

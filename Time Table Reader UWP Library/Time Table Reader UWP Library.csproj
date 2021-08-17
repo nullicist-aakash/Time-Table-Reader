@@ -120,7 +120,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Models\CourseComponentsModel.cs" />
     <Compile Include="Models\CourseModel.cs" />

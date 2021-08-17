@@ -24,6 +24,7 @@
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="0.20*"/>
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="{x:Bind Course_Name}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5" Grid.Column="0"/>
@@ -42,6 +43,8 @@
                                 <TextBlock Text="{x:Bind ToString()}"/>
                             </DataTemplate>
                         </ComboBox>
+
+                        <TextBlock Text="{x:Bind Credits.Units}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5" Grid.Column="4"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

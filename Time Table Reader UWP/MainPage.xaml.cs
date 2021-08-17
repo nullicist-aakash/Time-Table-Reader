@@ -27,7 +27,6 @@ namespace Time_Table_Reader_UWP
             list.AddLast((SelectCourse, typeof(Frames.Course_Selector), "Select Courses to Consider", NavigationFrame));
             list.AddLast((SelectTiming, typeof(Frames.Section_Selector), "Choose Sections", NavigationFrame));
             list.AddLast((View, typeof(Frames.TimeTableViewer), "Time Table View", NavigationFrame));
-            list.AddLast((FeedBack, typeof(Frames.Feedback), "Submit Feedback", NavigationFrame));
         }
 
         private void ShowAbout(object sender, TappedRoutedEventArgs e)
