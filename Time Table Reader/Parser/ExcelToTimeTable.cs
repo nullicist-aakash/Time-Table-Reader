@@ -39,9 +39,14 @@ namespace Time_Table_Generator
             {
                 var list = ExtractRows(xlWorkSheet.UsedRange);
                 if (list.Count > 0)
-                    list.RemoveAt(0);
-                if (list.Count > 0)
-                    list.RemoveAt(0);
+                {
+                    if (list.Count > 3)
+                        list.RemoveRange(0, 3);
+
+                    if (list.Last()[0].StartsWith(@"*"))
+                        list.RemoveAt(list.Count - 1);
+                }
+
                 mainList.AddRange(list);
             }
             return DoGenerateTimeTable(mainList);

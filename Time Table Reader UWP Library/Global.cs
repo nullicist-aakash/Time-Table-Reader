@@ -21,7 +21,7 @@ namespace TimeTableReader
             foreach (var x in new TimeTableModel(tt).Courses)
                 AvailableCourses.Courses.Add(x);
         }
-
+        
         public void SelectCourse(CourseModel c) => SelectCourse(AvailableCourses.Courses.IndexOf(c));
 
         public void SelectCourse(int index)

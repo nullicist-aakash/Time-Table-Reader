@@ -17,6 +17,8 @@ namespace Time_Table_Generator
         public readonly List<Section> PracticalClass = new List<Section>();
         public readonly List<Section> TutorialClass = new List<Section>();
 
+        public string CompreTiming { get; set; }
+
         public Course() { }
 
         public override bool Equals(object obj)

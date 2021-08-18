@@ -49,6 +49,7 @@
                     <ComboBox x:Name="Combo_Courses" Header="Select course to remove" HorizontalAlignment="Stretch" Margin="5" Grid.Column="0"/>
                     <Button x:Name="RemoveCourseButton" Content="Remove Course" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="5" IsEnabled="False"/>
                 </Grid>
+                <TextBlock HorizontalAlignment="Stretch" Margin="10" x:Name="UnitCount"/>
                 <ListView x:Name="List_Courses" SelectionMode="None" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" Header="Selected Courses"/>
             </StackPanel>
         </Grid>

@@ -58,6 +58,7 @@ namespace Time_Table_Reader_UWP.Frames
                 SuggestionsBox.ItemsSource = Ref.AvailableCourses.Courses;
                 Combo_Courses.ItemsSource = Ref.SelectedCourses.Courses;
                 List_Courses.ItemsSource = Ref.SelectedCourses.Courses;
+                UnitCount.Text = Ref.SelectedCourses.totalUnits.ToString() + " units selected";
             }
         }
 
@@ -65,6 +66,7 @@ namespace Time_Table_Reader_UWP.Frames
         {
             if (Combo_Courses.SelectedItem != null)
                 RemoveCourseButton.IsEnabled = true;
+            UnitCount.Text = Ref.SelectedCourses.totalUnits.ToString() + " units selected";
         }
 
         private void RemoveCourseButton_Click(object sender, RoutedEventArgs e)
@@ -72,6 +74,7 @@ namespace Time_Table_Reader_UWP.Frames
             var index = Combo_Courses.SelectedIndex;
             Ref.RemoveCourse(index);
             RemoveCourseButton.IsEnabled = false;
+            UnitCount.Text = Ref.SelectedCourses.totalUnits.ToString() + " units selected";
         }
 
         private void SuggestionTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
@@ -99,6 +102,7 @@ namespace Time_Table_Reader_UWP.Frames
                     break;
                 }
 
+            UnitCount.Text = Ref.SelectedCourses.totalUnits.ToString() + " units selected";
             SuggestionsBox.Text = "";
         }
 
@@ -116,6 +120,7 @@ namespace Time_Table_Reader_UWP.Frames
                 SuggestionsBox.ItemsSource = Ref.AvailableCourses.Courses;
                 Combo_Courses.ItemsSource = Ref.SelectedCourses.Courses;
                 List_Courses.ItemsSource = Ref.SelectedCourses.Courses;
+                UnitCount.Text = Ref.SelectedCourses.totalUnits.ToString() + " units selected";
             }
         }
     }

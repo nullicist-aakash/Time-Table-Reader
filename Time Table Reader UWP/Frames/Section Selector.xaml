@@ -10,6 +10,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <TextBlock x:Name="IsCompreClash" Visibility="Collapsed"/>
         <ListView Grid.Row="1" ItemsSource="{x:Bind ViewModel.Courses}" HorizontalAlignment="Stretch" SelectionMode="None">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -24,7 +25,8 @@
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="0.20*"/>
+                            <ColumnDefinition Width="0.25*"/>
+                            <ColumnDefinition Width="0.2*"/>
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="{x:Bind Course_Name}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5" Grid.Column="0"/>
@@ -43,8 +45,8 @@
                                 <TextBlock Text="{x:Bind ToString()}"/>
                             </DataTemplate>
                         </ComboBox>
-
-                        <TextBlock Text="{x:Bind Credits.Units}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5" Grid.Column="4"/>
+                        <TextBlock Text="{x:Bind CompreTiming}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5" Grid.Column="4"/>
+                        <TextBlock Text="{x:Bind Credits.Units}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5" Grid.Column="5"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

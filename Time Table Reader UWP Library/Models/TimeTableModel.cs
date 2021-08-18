@@ -1,23 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Collections.ObjectModel;
+using Prism.Mvvm;
 
 namespace TimeTableReader
 {
     public class TimeTableModel
     {
-        public ObservableCollection<CourseModel> Courses { get; } = new ObservableCollection<CourseModel>();
+        public ObservableCollection<CourseModel> Courses { get; } = new ObservableCollection<CourseModel>(); 
+        public int totalUnits;
 
         TimingMap map = new TimingMap();
         readonly List<SectionModel> lst = new List<SectionModel>();
 
-        public TimeTableModel() { }
+        public TimeTableModel()
+        {
+            Courses.CollectionChanged += (sender, e) =>
+            {
+                totalUnits = (from x in Courses select x.Credits.Units).Sum();
+            };
+        }
 
         public TimeTableModel(TimeTable tt)
         {
             foreach (var x in tt.Courses)
                 Courses.Add(new CourseModel(x));
         }
+
 
         public void Sort()
         {

@@ -79,7 +79,7 @@ namespace Time_Table_Generator
         public int LectureUnits => GetCredit(Row[3]);
         public int PracticalUnits => GetCredit(Row[4]);
         public int TotalUnits => GetCredit(Row[5]);
-        public Section Section => new Section() { SectionNo = int.Parse(Row[6].EndsWith("N") ? Row[6].Substring(1, Row[6].Length - 2) :  Row[6].Substring(1)) };
+        public Section Section => new Section() { SectionNo = int.Parse((Row[6].EndsWith("N") || Row[6].EndsWith("M")) ? Row[6].Substring(1, Row[6].Length - 2) :  Row[6].Substring(1)) };
         public string TeacherName => Row[7];
         public int RoomNo
         {
@@ -114,6 +114,7 @@ namespace Time_Table_Generator
                 return new Timing(s[0], s[1]);
             }
         }
+        public string CompreTiming => Row[11];
     }
 
     class Pilani_Parser : ExcelToTimeTable
@@ -208,7 +209,8 @@ namespace Time_Table_Generator
                     Lecture = row.LectureUnits,
                     Practical = row.PracticalUnits,
                     Units = row.TotalUnits
-                }
+                },
+                CompreTiming = row.CompreTiming
             };
             Console.WriteLine("{0} : Processing course : {1}", DateTime.Now, course.Course_Name);
 

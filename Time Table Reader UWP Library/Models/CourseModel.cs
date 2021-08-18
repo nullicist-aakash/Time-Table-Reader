@@ -13,6 +13,7 @@ namespace TimeTableReader
         public CourseComponentsModel GeneralComponent { get; set; }
         public CourseComponentsModel PracticalComponent { get; set; }
         public CourseComponentsModel TutorialComponent { get; set; }
+        public string CompreTiming { get; set; }
 
         public CourseModel() { }
 
@@ -25,6 +26,7 @@ namespace TimeTableReader
             GeneralComponent = new CourseComponentsModel(c.GeneralClass);
             PracticalComponent = new CourseComponentsModel(c.PracticalClass);
             TutorialComponent = new CourseComponentsModel(c.TutorialClass);
+            CompreTiming = c.CompreTiming;
         }
 
         public void OnCourseDeselected()

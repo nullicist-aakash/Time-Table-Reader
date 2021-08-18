@@ -10,7 +10,7 @@ namespace Time_Table_Generator
     {
         static void Main(string[] args)
         {
-            string fileloc = @"D:\DELs.xlsx";
+            string fileloc = @"E:\Time Table Reader\Pilani.xlsx";
 
             TimeTable t;
 
